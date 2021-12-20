@@ -1,6 +1,7 @@
 package com.example.kotlin_lessons
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -53,6 +54,16 @@ class MainActivity : AppCompatActivity() {
                 ).show()
             }
         })
+
+        // Вывод значений в консоль из разных циклов
+
+        for (i in 1..10) Log.d("myLogOne", "one $i")
+
+        for (i in 1..10 step 2) Log.d("myLogTwo", "two $i")
+
+        for (i in 5 until 10) Log.d("myLogThree", "three $i")
+
+        repeat(5) { Log.d("myLogFour", "four $it") }
     }
 
     data class Car(var color: String = "", var type: String = "")

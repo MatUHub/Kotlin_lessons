@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Kotlin_lessons</string>
+    <string name="text_view_first">text_view_first</string>
+    <string name="text_view_second">text_view_second</string>
+    <string name="button_first">button</string>
 </resources>

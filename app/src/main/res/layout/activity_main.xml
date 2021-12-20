@@ -29,5 +29,27 @@
         android:layout_height="wrap_content"
         android:text="@string/button_first" />
 
+    <TextView
+        android:id="@+id/text_view_first_copy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/text_view_first_copy"
+        android:textSize="@dimen/text_size_text_view" />
+
+    <TextView
+        android:id="@+id/text_view_second_copy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/text_view_second_copy"
+        android:textSize="@dimen/text_size_text_view" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_copy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_copy" />
+
 
 </LinearLayout>

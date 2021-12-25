@@ -35,7 +35,7 @@ class MainFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
+//companion задает static свойства
     companion object {
         fun newInstance() = MainFragment()
     }

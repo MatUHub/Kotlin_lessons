@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
+import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
 
@@ -36,13 +38,27 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         //Избежание утечек памяти
         // it - имя по умолчанию для одного параметра
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer<Any> { renderData(it) })
+        viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
         viewModel.getWeatherFromServer()
     }
 
-//requireContext() при вызове данно фнукции происходи поверка на null
-    fun renderData(data:Any){
-        Toast.makeText(requireContext(), "Work", Toast.LENGTH_SHORT).show()
+    //requireContext() при вызове данно фнукции происходи поверка на null
+    fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar.make(binding.mainView,"Success",Snackbar.LENGTH_SHORT).show()
+            }
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+                Snackbar.make(binding.mainView,"Error",Snackbar.LENGTH_LONG).setAction("Try again?"){viewModel.getWeatherFromServer()}.show()
+
+            }
+        }
+
     }
 
     override fun onCreateView(

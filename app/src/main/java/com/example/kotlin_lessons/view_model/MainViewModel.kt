@@ -6,18 +6,22 @@ import androidx.lifecycle.ViewModel
 import java.lang.Thread.sleep
 
 //MutableLiveData озанчает изменяемая LiveData, mutable - изменчевый
-class MainViewModel(val liveData: MutableLiveData<Any> = MutableLiveData()):ViewModel() {
+class MainViewModel(val liveData: MutableLiveData<AppState> = MutableLiveData()) : ViewModel() {
 
-    fun getLiveData():LiveData<Any>{
+    fun getLiveData(): LiveData<AppState> {
         return liveData
     }
 
-    fun getWeatherFromServer(){
-        Thread{
+    fun getWeatherFromServer() {
+        liveData.postValue(AppState.Loading(100))
+        Thread {
             sleep(2000)
+            val rand = (1..10).random()
+            if (rand < 5) liveData.postValue(AppState.Error("Ошибка"))
+            else liveData.postValue(AppState.Success("Заработало"))
             //.postValue синхронный поток
             //.value асинхронный поток
-            liveData.postValue(Any())
+                //liveData.postValue(AppState.Success("Свежесть преобладает"))
         }.start()
     }
 }

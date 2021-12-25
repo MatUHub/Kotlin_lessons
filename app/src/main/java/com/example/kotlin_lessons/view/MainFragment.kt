@@ -37,7 +37,9 @@ class MainFragment : Fragment() {
         //Избежание утечек памяти
         // it - имя по умолчанию для одного параметра
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<Any> { renderData(it) })
+        viewModel.getWeatherFromServer()
     }
+
 //requireContext() при вызове данно фнукции происходи поверка на null
     fun renderData(data:Any){
         Toast.makeText(requireContext(), "Work", Toast.LENGTH_SHORT).show()

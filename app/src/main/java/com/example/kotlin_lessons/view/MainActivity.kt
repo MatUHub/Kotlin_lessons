@@ -2,6 +2,7 @@ package com.example.kotlin_lessons.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,5 +16,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         //Введение binding в проект
         setContentView(binding.root)
+        if(savedInstanceState == null)
+            supportFragmentManager.beginTransaction().replace(R.id.container_main, MainFragment.newInstance()).commit()
     }
 }

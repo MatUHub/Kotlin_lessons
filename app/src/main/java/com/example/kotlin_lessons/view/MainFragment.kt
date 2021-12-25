@@ -50,7 +50,11 @@ class MainFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar.make(binding.mainView,"Success",Snackbar.LENGTH_SHORT).show()
+                binding.cityName.text = appState.weatherData.city.name
+                binding.cityCoordinates.text = "${appState.weatherData.city.lat} ${appState.weatherData.city.lon}"
+                binding.temperatureValue.text = "${appState.weatherData.temperature}"
+                binding.feelsLikeValue.text = "${appState.weatherData.feelsLike}"
+                Snackbar.make(binding.mainView,"${appState.weatherData.temperature}",Snackbar.LENGTH_SHORT).show()
             }
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE

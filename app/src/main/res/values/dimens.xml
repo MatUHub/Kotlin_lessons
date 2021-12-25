@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_city_coordinates">20sp</dimen>
+    <dimen name="text_size_temperatureLabel">21sp</dimen>
+    <dimen name="text_size_temperature_value">40sp</dimen>
+    <dimen name="text_size_feels_like_label">21sp</dimen>
+    <dimen name="text_size_feels_like_value">40sp</dimen>
+</resources>

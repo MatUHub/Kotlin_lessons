@@ -1,12 +1,19 @@
 package com.example.kotlin_lessons.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.kotlin_lessons.R
+import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlin_lessons.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    //Создание ссылки binding (используется для прямого доступа к xml файлам (binding.|id|textView.setText))
+    lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        // Инициализация binding в проекте
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        //Введение binding в проект
+        setContentView(binding.root)
     }
 }

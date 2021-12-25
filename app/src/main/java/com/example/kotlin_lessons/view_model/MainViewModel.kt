@@ -10,5 +10,4 @@ class MainViewModel(val liveData: MutableLiveData<Any> = MutableLiveData()):View
     fun getLiveData():LiveData<Any>{
         return liveData
     }
-
 }

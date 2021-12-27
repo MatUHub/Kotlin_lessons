@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
+import com.example.kotlin_lessons.model.Weather
+import com.example.kotlin_lessons.view.details.BUNDLE_KEY
+import com.example.kotlin_lessons.view.details.DetailsFragment
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), OnItemClickListener {
 
     //Создание переменной binding
     private var _binding: FragmentMainBinding? = null
@@ -75,12 +79,7 @@ class MainFragment : Fragment() {
 
                 adapter.setWeather(appState.weatherData)
 
-                /*binding.cityName.text = appState.weatherData.city.name
-                binding.cityCoordinates.text =
-                    "${appState.weatherData.city.lat} ${appState.weatherData.city.lon}"
-                binding.temperatureValue.text = "${appState.weatherData.temperature}"
-                binding.feelsLikeValue.text = "${appState.weatherData.feelsLike}"
-                */
+
                 Snackbar.make(
                     binding.root,
                     "Success",
@@ -109,6 +108,17 @@ class MainFragment : Fragment() {
     //companion задает static свойства
     companion object {
         fun newInstance() = MainFragment()
+    }
+
+    override fun onItemClick(weather: Weather) {
+        val bundle = Bundle()
+        bundle.putParcelable(BUNDLE_KEY, weather)
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .add(R.id.container_main, DetailsFragment.newInstance(bundle))
+            .addToBackStack("")
+            .commit()
+
     }
 }
 

@@ -1,12 +1,17 @@
 package com.example.kotlin_lessons.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Weather(
     val city: City = getDefaultCity(),
     val temperature: Int = 10,
     val feelsLike: Int = 20
-)
+): Parcelable
 
-data class City(var name: String, val lon: Double, val lat: Double)
+@Parcelize
+data class City(var name: String, val lon: Double, val lat: Double): Parcelable
 
 fun getDefaultCity() = City("Москва", 37.8, 55.5)
 

@@ -41,9 +41,11 @@ class MainFragment : Fragment() {
         //Избежание утечек памяти
         // it - имя по умолчанию для одного параметра
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
+        binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener {
             sentRequest()
         }
+        viewModel.getWeatherFromLocalSourceRus()
     }
 
     private fun sentRequest() {

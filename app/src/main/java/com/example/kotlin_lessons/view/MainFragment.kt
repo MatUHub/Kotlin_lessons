@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
 import com.example.kotlin_lessons.view_model.AppState
@@ -16,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 class MainFragment : Fragment() {
 
     //Создание переменной binding
- var _binding: FragmentMainBinding? = null
+    private var _binding: FragmentMainBinding? = null
 
     //Схема для унчитожения binding при лквидации Activity
     private val binding: FragmentMainBinding
@@ -68,7 +67,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // Инициализация binding в проекте
         _binding = FragmentMainBinding.inflate(inflater, container, false)

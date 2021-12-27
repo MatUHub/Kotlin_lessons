@@ -8,7 +8,7 @@ import java.lang.Thread.sleep
 
 //MutableLiveData озанчает изменяемая LiveData, mutable - изменчевый
 class MainViewModel(
-    val liveData: MutableLiveData<AppState> = MutableLiveData(),
+    private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val repositoryImpl: RepositoryImpl = RepositoryImpl()
 ) : ViewModel() {
 

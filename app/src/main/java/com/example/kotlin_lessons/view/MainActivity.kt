@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         //Введение binding в проект
         setContentView(binding.root)
         if(savedInstanceState == null)
-            supportFragmentManager.beginTransaction().replace(R.id.container_main, MainFragment.newInstance()).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.container_main,
+                MainFragment.newInstance()
+            ).commit()
     }
 }

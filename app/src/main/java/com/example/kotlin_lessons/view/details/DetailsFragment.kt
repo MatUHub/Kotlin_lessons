@@ -1,4 +1,4 @@
-package com.example.kotlin_lessons.view
+package com.example.kotlin_lessons.view.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class MainFragment : Fragment() {
+class DetailsFragment : Fragment() {
 
     //Создание переменной binding
     private var _binding: FragmentMainBinding? = null
@@ -23,7 +23,7 @@ class MainFragment : Fragment() {
             return _binding!!
         }
 
-    private val adapter = MainFragmentAdapter()
+    //private val adapter = MainFragmentAdapter()
     private var isRussian = true
 
     //Создание ссылки на ViewModel
@@ -71,7 +71,7 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 binding.mainFragmentLoadingLayout.visibility = View.GONE
 
-                adapter.setWeather(appState.weatherData)
+                //adapter.setWeather(appState.weatherData)
 
                 /*binding.cityName.text = appState.weatherData.city.name
                 binding.cityCoordinates.text =
@@ -106,7 +106,7 @@ class MainFragment : Fragment() {
 
     //companion задает static свойства
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() = DetailsFragment()
     }
 }
 

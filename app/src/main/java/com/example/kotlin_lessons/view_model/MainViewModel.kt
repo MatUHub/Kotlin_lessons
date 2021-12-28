@@ -20,17 +20,14 @@ class MainViewModel(
     fun getWeatherFromLocalSourceWorld() = getWeatherFromLocalServer(false)
     fun getWeatherFromRemoteSource() = getWeatherFromLocalServer(true)
 
-
     fun getWeatherFromLocalServer(isRussia: Boolean) {
         liveData.postValue(AppState.Loading(100))
         Thread {
-            sleep(2000)
+            sleep(1000)
             val rand = (1..10).random()
-            if (rand < 5) liveData.postValue(AppState.Error("Ошибка"))
-            else liveData.postValue(AppState.Success(if (isRussia) repositoryImpl.getWeatherFromLocalStorageRus() else repositoryImpl.getWeatherFromLocalStorageWorld()))
+            liveData.postValue(AppState.Success(if (isRussia) repositoryImpl.getWeatherFromLocalStorageRus() else repositoryImpl.getWeatherFromLocalStorageWorld()))
             //.postValue синхронный поток
             //.value асинхронный поток
-            //liveData.postValue(AppState.Success("Свежесть преобладает"))
         }.start()
     }
 }

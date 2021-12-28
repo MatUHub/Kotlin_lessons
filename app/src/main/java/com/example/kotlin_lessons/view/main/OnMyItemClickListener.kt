@@ -1,7 +1,7 @@
-package com.example.kotlin_lessons.view
+package com.example.kotlin_lessons.view.main
 
 import com.example.kotlin_lessons.model.Weather
 
-interface OnItemClickListener {
+interface OnMyItemClickListener {
     fun onItemClick(weather: Weather)
 }

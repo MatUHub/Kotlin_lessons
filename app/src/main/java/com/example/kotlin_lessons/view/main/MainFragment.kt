@@ -1,4 +1,4 @@
-package com.example.kotlin_lessons.view
+package com.example.kotlin_lessons.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,7 +16,7 @@ import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class MainFragment : Fragment(), OnItemClickListener {
+class MainFragment : Fragment(), OnMyItemClickListener {
 
     //Создание переменной binding
     private var _binding: FragmentMainBinding? = null
@@ -27,7 +27,7 @@ class MainFragment : Fragment(), OnItemClickListener {
             return _binding!!
         }
 
-    private val adapter = MainFragmentAdapter()
+    private val adapter = MainFragmentAdapter(this)
     private var isRussian = true
 
     //Создание ссылки на ViewModel
@@ -55,12 +55,13 @@ class MainFragment : Fragment(), OnItemClickListener {
     private fun sentRequest() {
         isRussian = !isRussian
         if (isRussian) {
+            binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
             viewModel.getWeatherFromLocalSourceRus()
         } else {
+            binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
             viewModel.getWeatherFromLocalSourceWorld()
         }
     }
-
 
     //requireContext() при вызове данно фнукции происходи поверка на null
     fun renderData(appState: AppState) {
@@ -79,7 +80,6 @@ class MainFragment : Fragment(), OnItemClickListener {
 
                 adapter.setWeather(appState.weatherData)
 
-
                 Snackbar.make(
                     binding.root,
                     "Success",
@@ -87,7 +87,6 @@ class MainFragment : Fragment(), OnItemClickListener {
                 ).show()
             }
         }
-
     }
 
     override fun onCreateView(
@@ -115,9 +114,9 @@ class MainFragment : Fragment(), OnItemClickListener {
         bundle.putParcelable(BUNDLE_KEY, weather)
         requireActivity().supportFragmentManager
             .beginTransaction()
-            .add(R.id.container_main, DetailsFragment.newInstance(bundle))
+            .replace(R.id.container_main, DetailsFragment.newInstance(bundle))
             .addToBackStack("")
-            .commit()
+            .commitAllowingStateLoss()
 
     }
 }

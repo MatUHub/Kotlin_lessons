@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
-import com.example.kotlin_lessons.view_model.MainViewModel
 
 const val BUNDLE_KEY = "bundleKey"
 
@@ -21,17 +20,7 @@ class DetailsFragment : Fragment() {
         get() {
             return _binding!!
         }
-
-    //private val adapter = MainFragmentAdapter()
-    private var isRussian = true
-
-    //Создание ссылки на ViewModel
-    private lateinit var viewModel: MainViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
@@ -47,7 +36,6 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         // Инициализация binding в проекте
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root

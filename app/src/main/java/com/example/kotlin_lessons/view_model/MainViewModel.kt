@@ -20,11 +20,10 @@ class MainViewModel(
     fun getWeatherFromLocalSourceWorld() = getWeatherFromLocalServer(false)
     fun getWeatherFromRemoteSource() = getWeatherFromLocalServer(true)
 
-    fun getWeatherFromLocalServer(isRussia: Boolean) {
+    private fun getWeatherFromLocalServer(isRussia: Boolean) {
         liveData.postValue(AppState.Loading(100))
         Thread {
             sleep(1000)
-            val rand = (1..10).random()
             liveData.postValue(AppState.Success(if (isRussia) repositoryImpl.getWeatherFromLocalStorageRus() else repositoryImpl.getWeatherFromLocalStorageWorld()))
             //.postValue синхронный поток
             //.value асинхронный поток

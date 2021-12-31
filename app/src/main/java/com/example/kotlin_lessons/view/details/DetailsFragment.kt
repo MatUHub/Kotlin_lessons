@@ -20,7 +20,7 @@ class DetailsFragment : Fragment() {
         get() {
             return _binding!!
         }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)

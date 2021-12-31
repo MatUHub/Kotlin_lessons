@@ -9,7 +9,7 @@ import com.example.kotlin_lessons.view.main.MainFragment
 class MainActivity : AppCompatActivity() {
 
     //Создание ссылки binding (используется для прямого доступа к xml файлам (binding.|id|textView.setText))
-    lateinit var binding: ActivityMainBinding
+   private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

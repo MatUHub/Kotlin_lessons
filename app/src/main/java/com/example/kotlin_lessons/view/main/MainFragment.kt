@@ -27,7 +27,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
             return _binding!!
         }
 
-    private val adapter = MainFragmentAdapter(this)
+    private val adapter: MainFragmentAdapter by lazy { MainFragmentAdapter(this) }
     private var isRussian = true
 
     //Создание ссылки на ViewModel
@@ -44,47 +44,59 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         //Избежание утечек памяти
         // it - имя по умолчанию для одного параметра
+        initView()
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
-        binding.mainFragmentRecyclerView.adapter = adapter
-        binding.mainFragmentFAB.setOnClickListener {
-            sentRequest()
-        }
         viewModel.getWeatherFromLocalSourceRus()
+    }
+
+    private fun initView() {
+        with(binding) {
+            mainFragmentRecyclerView.adapter = adapter
+            mainFragmentFAB.setOnClickListener {
+                sentRequest()
+            }
+        }
     }
 
     private fun sentRequest() {
         isRussian = !isRussian
-        if (isRussian) {
-            binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
-            viewModel.getWeatherFromLocalSourceRus()
-        } else {
-            binding.mainFragmentFAB.setImageResource(R.drawable.ic_earth)
-            viewModel.getWeatherFromLocalSourceWorld()
+
+        with(binding) {
+            if (isRussian) {
+                mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+                viewModel.getWeatherFromLocalSourceRus()
+            } else {
+                mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+                viewModel.getWeatherFromLocalSourceWorld()
+            }
         }
+
     }
 
     //requireContext() при вызове данно фнукции происходи поверка на null
     fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.Error -> {
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
-                Snackbar.make(binding.root, "Error", Snackbar.LENGTH_LONG)
-                    .setAction("Try again") { sentRequest() }.show()
+        with(binding) {
+            when (appState) {
+                is AppState.Error -> {
+                    mainFragmentLoadingLayout.visibility = View.GONE
+                    Snackbar.make(root, "Error", Snackbar.LENGTH_LONG)
+                        .setAction("Try again") { sentRequest() }.show()
 
-            }
-            is AppState.Loading -> {
-                binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
-            }
-            is AppState.Success -> {
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
+                }
+                is AppState.Loading -> {
+                    mainFragmentLoadingLayout.visibility = View.VISIBLE
+                }
+                is AppState.Success -> {
+                    mainFragmentLoadingLayout.visibility = View.GONE
 
-                adapter.setWeather(appState.weatherData)
+                    adapter.setWeather(appState.weatherData)
 
-                Snackbar.make(
-                    binding.root,
-                    "Success",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                    Snackbar.make(
+                        root,
+                        "Success",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -110,14 +122,18 @@ class MainFragment : Fragment(), OnMyItemClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(BUNDLE_KEY, weather)
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container_main, DetailsFragment.newInstance(bundle))
-            .addToBackStack("")
-            .commitAllowingStateLoss()
 
+        activity?.run {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container_main,
+                    DetailsFragment.newInstance(Bundle().apply {
+                        putParcelable(BUNDLE_KEY, weather)
+                    }
+                    ))
+                .addToBackStack("").commit()
+
+        }
     }
 }
 

@@ -3,9 +3,9 @@ package com.example.kotlin_lessons.view.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin_lessons.R
+import com.example.kotlin_lessons.databinding.MainRecyclerItemBinding
 import com.example.kotlin_lessons.model.Weather
 
 class MainFragmentAdapter(val listener: OnMyItemClickListener) :
@@ -34,10 +34,11 @@ class MainFragmentAdapter(val listener: OnMyItemClickListener) :
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(weather: Weather) {
-            itemView.findViewById<TextView>(R.id.mainFragmentRecyclerItemTextView).text =
-                weather.city.name
-            itemView.setOnClickListener {
-                listener.onItemClick(weather)
+            with(MainRecyclerItemBinding.bind(itemView)) {
+                mainFragmentRecyclerItemTextView.text = weather.city.name
+                root.setOnClickListener {
+                    listener.onItemClick(weather)
+                }
             }
         }
     }

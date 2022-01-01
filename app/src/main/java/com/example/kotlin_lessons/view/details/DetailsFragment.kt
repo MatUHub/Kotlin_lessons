@@ -23,9 +23,10 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
-        if (weather != null) {
-            setWeatherData(weather)
+        arguments?.let {
+            it.getParcelable<Weather>(BUNDLE_KEY)?.run {
+                setWeatherData(this)
+            }
         }
     }
 
@@ -55,13 +56,12 @@ class DetailsFragment : Fragment() {
 
     //companion задает static свойства
     companion object {
-        fun newInstance(bundle: Bundle): DetailsFragment {
-            val fragment = DetailsFragment()
-            fragment.arguments = bundle
-            return fragment
+        fun newInstance(bundle: Bundle) = DetailsFragment().apply {
+            arguments = bundle
         }
     }
-}
+    }
+
 
 
 

@@ -25,10 +25,17 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
         if (weather != null) {
-            binding.cityName.text = weather.city.name
-            binding.cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-            binding.temperatureValue.text = "${weather.temperature}"
-            binding.feelsLikeValue.text = "${weather.feelsLike}"
+            setWeatherData(weather)
+        }
+    }
+
+    private fun setWeatherData(weather: Weather){
+
+        with(binding) {
+            cityName.text = weather.city.name
+            cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
+            temperatureValue.text = "${weather.temperature}"
+            feelsLikeValue.text = "${weather.feelsLike}"
         }
     }
 

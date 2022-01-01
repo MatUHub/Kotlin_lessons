@@ -17,9 +17,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         //Введение binding в проект
         setContentView(binding.root)
-        if(savedInstanceState == null)
-            supportFragmentManager.beginTransaction().replace(R.id.container_main,
-                MainFragment.newInstance()
-            ).commit()
+        if (savedInstanceState == null)
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container_main, MainFragment.newInstance())
+                .commit()
     }
 }

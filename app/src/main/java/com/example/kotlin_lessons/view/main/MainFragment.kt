@@ -126,7 +126,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         activity?.run {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container_main,
+                .add(R.id.container_main,
                     DetailsFragment.newInstance(Bundle().apply {
                         putParcelable(BUNDLE_KEY, weather)
                     }

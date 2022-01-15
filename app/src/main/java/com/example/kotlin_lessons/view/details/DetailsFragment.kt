@@ -1,16 +1,19 @@
 package com.example.kotlin_lessons.view.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
+import com.example.kotlin_lessons.model.WeatherDTO
+import com.example.kotlin_lessons.utils.WeatherLoader
 
 const val BUNDLE_KEY = "bundleKey"
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
 
     //Создание переменной binding
     private var _binding: FragmentDetailsBinding? = null
@@ -24,8 +27,9 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            it.getParcelable<Weather>(BUNDLE_KEY)?.run {
-                setWeatherData(this)
+            it.getParcelable<Weather>(BUNDLE_KEY)?.let {
+                setWeatherData(it)
+                WeatherLoader(it.city.lat,it.city.lon,this).loadWeather()
             }
         }
     }
@@ -60,7 +64,15 @@ class DetailsFragment : Fragment() {
             arguments = bundle
         }
     }
+
+    override fun onLoaded(weatherDTO: WeatherDTO) {
+        Log.d("","")
     }
+
+    override fun onFailed() {
+        TODO("Not yet implemented")
+    }
+}
 
 
 

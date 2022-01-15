@@ -117,7 +117,7 @@ class WeatherDTO (
 
     data class Info (
         val url: String,
-        val lat: Long,
-        val lon: Long
+        val lat: Double,
+        val lon: Double
     )
 

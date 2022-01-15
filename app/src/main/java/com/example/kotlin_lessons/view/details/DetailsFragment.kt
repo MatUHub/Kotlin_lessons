@@ -28,22 +28,23 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             it.getParcelable<Weather>(BUNDLE_KEY)?.let {
-                setWeatherData(it)
+                localWeather = it
                 WeatherLoader(it.city.lat,it.city.lon,this).loadWeather()
             }
         }
     }
 
-    private fun setWeatherData(weather: Weather){
+    private fun setWeatherData(weatherDTO: WeatherDTO){
 
         with(binding) {
-            cityName.text = weather.city.name
-            cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-            temperatureValue.text = "${weather.temperature}"
-            feelsLikeValue.text = "${weather.feelsLike}"
+            cityName.text = localWeather.city.name
+            cityCoordinates.text = "${ localWeather.city.lat} ${ localWeather.city.lon}"
+            temperatureValue.text = "${ weatherDTO.fact.temp}"
+            feelsLikeValue.text = "${ weatherDTO.fact.feelsLike}"
         }
     }
 
+    lateinit var localWeather: Weather
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +66,10 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
         }
     }
 
-    override fun onLoaded(weatherDTO: WeatherDTO) {
+    override fun onLoaded(weatherDTO: WeatherDTO?) {
+        weatherDTO?.let {
+            setWeatherData(weatherDTO)
+        }
         Log.d("","")
     }
 

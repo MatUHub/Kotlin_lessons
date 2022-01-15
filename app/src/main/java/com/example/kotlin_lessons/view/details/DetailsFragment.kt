@@ -5,11 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.model.WeatherDTO
 import com.example.kotlin_lessons.utils.WeatherLoader
+import com.example.kotlin_lessons.view.main.MainFragment
+import com.google.android.material.snackbar.Snackbar
 
 const val BUNDLE_KEY = "bundleKey"
 
@@ -74,7 +77,7 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
     }
 
     override fun onFailed() {
-        TODO("Not yet implemented")
+       Toast.makeText(requireContext(),"errors",Toast.LENGTH_SHORT).show()
     }
 }
 

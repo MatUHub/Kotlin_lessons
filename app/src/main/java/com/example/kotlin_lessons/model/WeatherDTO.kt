@@ -1,7 +1,10 @@
 package com.example.kotlin_lessons.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 class WeatherDTO (
     val now: Long,
 
@@ -11,7 +14,8 @@ class WeatherDTO (
     val info: Info,
     val fact: Fact,
     val forecast: Forecast
-)
+):Parcelable
+@Parcelize
     data class Fact (
         //Аннотация SerializedName необходима что бы при получения значения с сайта ("part_name") присваивалось переменной partName
         @SerializedName("obs_time")
@@ -44,8 +48,8 @@ class WeatherDTO (
 
         @SerializedName("wind_gust")
         val windGust: Double
-    )
-
+    ):Parcelable
+@Parcelize
     data class Forecast (
         val date: String,
 
@@ -63,8 +67,8 @@ class WeatherDTO (
         val moonText: String,
 
         val parts: List<Part>
-    )
-
+    ):Parcelable
+@Parcelize
     data class Part (
 
         @SerializedName("part_name")
@@ -113,11 +117,11 @@ class WeatherDTO (
 
         val daytime: String,
         val polar: Boolean
-    )
-
+    ):Parcelable
+@Parcelize
     data class Info (
         val url: String,
         val lat: Double,
         val lon: Double
-    )
+    ):Parcelable
 

@@ -1,5 +1,9 @@
 package com.example.kotlin_lessons.view.details
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,10 +15,12 @@ import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.model.WeatherDTO
 import com.example.kotlin_lessons.utils.WeatherLoader
-import com.example.kotlin_lessons.view.main.MainFragment
-import com.google.android.material.snackbar.Snackbar
 
 const val BUNDLE_KEY = "bundleKey"
+const val BUNDLE_KEY_WEATHER = "key_weather_dto"
+const val BUNDLE_KEY_LAT = "key_lat"
+const val BUNDLE_KEY_LON = "key_lon"
+const val BROADCAST_ACTION = "broadcast_action"
 
 class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
 
@@ -27,23 +33,42 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
             return _binding!!
         }
 
+    val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)?.let {
+                    setWeatherData(it)
+                }
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             it.getParcelable<Weather>(BUNDLE_KEY)?.let {
                 localWeather = it
-                WeatherLoader(it.city.lat,it.city.lon,this).loadWeather()
+                WeatherLoader(it.city.lat, it.city.lon, this).loadWeather()
+                requireActivity().startService(
+                    Intent(
+                        requireActivity(),
+                        DetailsService::class.java
+                    ).apply {
+                        putExtra(BUNDLE_KEY_LAT, it.city.lat)
+                        putExtra(BUNDLE_KEY_LON, it.city.lon)
+                    })
             }
         }
+        requireActivity().registerReceiver(receiver, IntentFilter(BROADCAST_ACTION))
     }
 
-    private fun setWeatherData(weatherDTO: WeatherDTO){
+    private fun setWeatherData(weatherDTO: WeatherDTO) {
 
         with(binding) {
             cityName.text = localWeather.city.name
-            cityCoordinates.text = "${ localWeather.city.lat} ${ localWeather.city.lon}"
-            temperatureValue.text = "${ weatherDTO.fact.temp}"
-            feelsLikeValue.text = "${ weatherDTO.fact.feelsLike}"
+            cityCoordinates.text = "${localWeather.city.lat} ${localWeather.city.lon}"
+            temperatureValue.text = "${weatherDTO.fact.temp}"
+            feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
         }
     }
 
@@ -73,11 +98,11 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
         weatherDTO?.let {
             setWeatherData(weatherDTO)
         }
-        Log.d("","")
+        Log.d("", "")
     }
 
     override fun onFailed() {
-       Toast.makeText(requireContext(),"errors",Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "errors", Toast.LENGTH_SHORT).show()
     }
 }
 

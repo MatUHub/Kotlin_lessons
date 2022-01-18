@@ -37,12 +37,10 @@ class DetailsService(name: String = "") : IntentService(name) {
        sendBroadcast(Intent(BROADCAST_ACTION).apply {
            putExtra(BUNDLE_KEY_WEATHER, weatherDTO)
        })
-
     }
 
     private fun convertBufferToResult(bufferedReader: BufferedReader): String {
         return bufferedReader.lines()
             .collect(Collectors.joining("\n")) // Подчеркивает, но при этом все работает
     }
-
 }

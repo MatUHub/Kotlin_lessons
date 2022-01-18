@@ -85,6 +85,7 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        requireActivity().unregisterReceiver(receiver)
     }
 
     //companion задает static свойства

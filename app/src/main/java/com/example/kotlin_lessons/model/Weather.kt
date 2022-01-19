@@ -11,7 +11,7 @@ data class Weather(
 ): Parcelable
 
 @Parcelize
-data class City(var name: String, val lon: Double, val lat: Double): Parcelable
+data class City(var name: String, val lat: Double, val lon: Double): Parcelable
 
 fun getDefaultCity() = City("Москва", 37.8, 55.5)
 

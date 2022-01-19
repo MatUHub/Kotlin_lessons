@@ -33,7 +33,7 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
             return _binding!!
         }
 
-    val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+    private  val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)?.let {
@@ -72,7 +72,7 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
         }
     }
 
-    lateinit var localWeather: Weather
+    private lateinit var localWeather: Weather
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

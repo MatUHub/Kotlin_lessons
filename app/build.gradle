@@ -9,16 +9,16 @@ apply plugin: 'kotlin-android'
 android {
     compileSdk 30
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
 
-buildTypes.each{
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
-    def apiKey = properties.getProperty("yandex_weather_api_key", "")
-    it.buildConfigField "String", "WEATHER_API_KEY", apiKey
-}
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def apiKey = properties.getProperty("yandex_weather_api_key", "")
+        it.buildConfigField "String", "WEATHER_API_KEY", apiKey
+    }
 
     defaultConfig {
         applicationId "com.example.kotlin_lessons"
@@ -46,6 +46,8 @@ buildTypes.each{
 }
 
 dependencies {
+
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
 
     implementation 'com.google.code.gson:gson:2.8.8'
 

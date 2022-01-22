@@ -14,13 +14,11 @@ import androidx.fragment.app.Fragment
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.model.WeatherDTO
-import com.example.kotlin_lessons.utils.WeatherLoader
+import com.example.kotlin_lessons.utils.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
-const val BUNDLE_KEY = "bundleKey"
-const val BUNDLE_KEY_WEATHER = "key_weather_dto"
-const val BUNDLE_KEY_LAT = "key_lat"
-const val BUNDLE_KEY_LON = "key_lon"
-const val BROADCAST_ACTION = "broadcast_action"
+
 
 class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
 
@@ -41,6 +39,14 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
                 }
             }
         }
+    }
+    var client: OkHttpClient? = null
+    fun getWeather(){
+      if(client == null){
+          client = OkHttpClient()
+
+
+      }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.api.load
+import com.bumptech.glide.Glide
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.utils.BROADCAST_ACTION
@@ -17,6 +19,7 @@ import com.example.kotlin_lessons.utils.BUNDLE_KEY
 import com.example.kotlin_lessons.utils.BUNDLE_KEY_WEATHER
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.DetailsViewModel
+import com.squareup.picasso.Picasso
 import okhttp3.OkHttpClient
 
 
@@ -62,11 +65,12 @@ class DetailsFragment : Fragment() {
             }
         }
     }
+
     private lateinit var localWeather: Weather
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getLiveData().observe(viewLifecycleOwner, {
-renderData(it)
+            renderData(it)
         })
         arguments?.let {
             it.getParcelable<Weather>(BUNDLE_KEY)?.let {
@@ -84,9 +88,18 @@ renderData(it)
             cityCoordinates.text = "${localWeather.city.lat} ${localWeather.city.lon}"
             temperatureValue.text = "${weather.temperature}"
             feelsLikeValue.text = "${weather.feelsLike}"
+
+            Glide.with(requireActivity())
+                .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png").into(headerIcon)
+
+            // Загрузка картинки с помощью других библиотек
+
+            /*Picasso.get().load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+                .into(headerIcon)
+
+            headerIcon.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")*/
         }
     }
-
 
 
     override fun onCreateView(

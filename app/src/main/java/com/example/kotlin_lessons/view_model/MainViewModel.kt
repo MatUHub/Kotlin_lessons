@@ -2,7 +2,7 @@ package com.example.kotlin_lessons.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin_lessons.model.RepositoryImpl
+import com.example.kotlin_lessons.repository.RepositoryImpl
 import java.lang.Thread.sleep
 
 //MutableLiveData озанчает изменяемая LiveData, mutable - изменчевый

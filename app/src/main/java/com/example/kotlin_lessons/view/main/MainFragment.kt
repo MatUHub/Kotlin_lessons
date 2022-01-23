@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
 import com.example.kotlin_lessons.model.Weather
-import com.example.kotlin_lessons.view.details.BUNDLE_KEY
+import com.example.kotlin_lessons.utils.BUNDLE_KEY
 import com.example.kotlin_lessons.view.details.DetailsFragment
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.MainViewModel

@@ -11,16 +11,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.kotlin_lessons.BuildConfig
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.model.WeatherDTO
 import com.example.kotlin_lessons.utils.*
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.example.kotlin_lessons.view_model.AppState
+import com.example.kotlin_lessons.view_model.DetailsViewModel
+import com.example.kotlin_lessons.view_model.MainViewModel
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import okhttp3.*
+import java.io.IOException
 
 
-
-class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
+class DetailsFragment : Fragment() {
 
     //Создание переменной binding
     private var _binding: FragmentDetailsBinding? = null
@@ -31,54 +37,64 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
             return _binding!!
         }
 
-    private  val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
-                it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)?.let {
+                it.getParcelableExtra<Weather>(BUNDLE_KEY_WEATHER)?.let {
                     setWeatherData(it)
                 }
             }
         }
     }
     var client: OkHttpClient? = null
-    fun getWeather(){
-      if(client == null){
-          client = OkHttpClient()
 
-
-      }
+    private val viewModel: DetailsViewModel by lazy {
+        ViewModelProvider(this).get(DetailsViewModel::class.java)
     }
 
+    fun renderData(appState: AppState) {
+        with(binding) {
+            when (appState) {
+                is AppState.Error -> {
+// TODO HW
+                }
+                is AppState.Loading -> {
+// TODO HW
+                }
+                is AppState.Success -> {
+                    val weather = appState.weatherData[0]
+                    setWeatherData(weather)
+                }
+            }
+        }
+    }
+    private lateinit var localWeather: Weather
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getLiveData().observe(viewLifecycleOwner, {
+renderData(it)
+        })
         arguments?.let {
             it.getParcelable<Weather>(BUNDLE_KEY)?.let {
                 localWeather = it
-                WeatherLoader(it.city.lat, it.city.lon, this).loadWeather()
-                requireActivity().startService(
-                    Intent(
-                        requireActivity(),
-                        DetailsService::class.java
-                    ).apply {
-                        putExtra(BUNDLE_KEY_LAT, it.city.lat)
-                        putExtra(BUNDLE_KEY_LON, it.city.lon)
-                    })
+                viewModel.getWeatherFromRemoteServer(localWeather.city.lat, localWeather.city.lon)
             }
         }
         requireActivity().registerReceiver(receiver, IntentFilter(BROADCAST_ACTION))
     }
 
-    private fun setWeatherData(weatherDTO: WeatherDTO) {
+    private fun setWeatherData(weather: Weather) {
 
         with(binding) {
             cityName.text = localWeather.city.name
             cityCoordinates.text = "${localWeather.city.lat} ${localWeather.city.lon}"
-            temperatureValue.text = "${weatherDTO.fact.temp}"
-            feelsLikeValue.text = "${weatherDTO.fact.feelsLike}"
+            temperatureValue.text = "${weather.temperature}"
+            feelsLikeValue.text = "${weather.feelsLike}"
         }
     }
 
-    private lateinit var localWeather: Weather
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -101,16 +117,6 @@ class DetailsFragment : Fragment(), WeatherLoader.OnWeatherLoaded {
         }
     }
 
-    override fun onLoaded(weatherDTO: WeatherDTO?) {
-        weatherDTO?.let {
-            setWeatherData(weatherDTO)
-        }
-        Log.d("", "")
-    }
-
-    override fun onFailed() {
-        Toast.makeText(requireContext(), "errors", Toast.LENGTH_SHORT).show()
-    }
 }
 
 

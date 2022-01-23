@@ -8,3 +8,5 @@ const val BROADCAST_ACTION = "broadcast_action"
 
 const val YANDEX_API_URL = "https://api.weather.yandex.ru/"
 const val YANDEX_API_END_POINT = "v2/informs"
+
+const val YANDEX_API_KEY = "X-Yandex-API-Key"

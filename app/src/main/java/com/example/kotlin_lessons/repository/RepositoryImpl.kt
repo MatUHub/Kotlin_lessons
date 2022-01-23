@@ -5,7 +5,7 @@ import com.example.kotlin_lessons.model.getRussianCities
 import com.example.kotlin_lessons.model.getWorldCities
 import com.example.kotlin_lessons.utils.YANDEX_API_KEY
 import okhttp3.*
-import javax.security.auth.callback.Callback
+
 
 class RepositoryImpl: RepositoryCitiesList,RepositoryDetails {
 

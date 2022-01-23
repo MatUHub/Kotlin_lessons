@@ -12,7 +12,7 @@ import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Response
 import java.io.IOException
-import javax.security.auth.callback.Callback
+import okhttp3.Callback
 
 //MutableLiveData озанчает изменяемая LiveData, mutable - изменчевый
 class DetailsViewModel(
@@ -37,11 +37,11 @@ class DetailsViewModel(
     }
 
    private val callback = object : Callback{
-         fun onFailure(call: Call, e: IOException) {
+       override  fun onFailure(call: Call, e: IOException) {
             TODO("Not yet implemented")
         }
 
-         fun onResponse(call: Call, response: Response) {
+       override fun onResponse(call: Call, response: Response) {
             if (response.isSuccessful) {
                 response.body()?.let {
                     val json = it.string()

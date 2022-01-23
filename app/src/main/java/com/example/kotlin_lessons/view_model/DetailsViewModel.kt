@@ -1,5 +1,6 @@
 package com.example.kotlin_lessons.view_model
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlin_lessons.model.Weather
@@ -41,7 +42,7 @@ class DetailsViewModel(
 
     private val callback = object : Callback<WeatherDTO> {
         override fun onFailure(call: Call<WeatherDTO>, e: Throwable) {
-            TODO("Not yet implemented")
+            Log.d("Error", "Server not found")
         }
 
         override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
@@ -50,7 +51,9 @@ class DetailsViewModel(
                     liveData.postValue(AppState.Success(converterDTOtoModel(it)))
                 }
             } else {
-//TODO HW
+                response.body()?.let {
+                    liveData.postValue(AppState.Error(it))
+                }
             }
         }
     }

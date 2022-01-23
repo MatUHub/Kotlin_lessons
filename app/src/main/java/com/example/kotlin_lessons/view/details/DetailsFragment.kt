@@ -8,9 +8,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import coil.api.load
 import com.bumptech.glide.Glide
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
@@ -19,8 +19,7 @@ import com.example.kotlin_lessons.utils.BUNDLE_KEY
 import com.example.kotlin_lessons.utils.BUNDLE_KEY_WEATHER
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.DetailsViewModel
-import com.squareup.picasso.Picasso
-import okhttp3.OkHttpClient
+
 
 
 class DetailsFragment : Fragment() {
@@ -43,20 +42,19 @@ class DetailsFragment : Fragment() {
             }
         }
     }
-    var client: OkHttpClient? = null
 
     private val viewModel: DetailsViewModel by lazy {
         ViewModelProvider(this).get(DetailsViewModel::class.java)
     }
 
-    fun renderData(appState: AppState) {
+   private fun renderData(appState: AppState) {
         with(binding) {
             when (appState) {
                 is AppState.Error -> {
-// TODO HW
+                    Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
                 }
                 is AppState.Loading -> {
-// TODO HW
+                    Toast.makeText(context,"Loading",Toast.LENGTH_SHORT).show()
                 }
                 is AppState.Success -> {
                     val weather = appState.weatherData[0]

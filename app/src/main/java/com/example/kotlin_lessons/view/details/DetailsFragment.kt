@@ -5,25 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.kotlin_lessons.BuildConfig
 import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.model.Weather
-import com.example.kotlin_lessons.model.WeatherDTO
-import com.example.kotlin_lessons.utils.*
+import com.example.kotlin_lessons.utils.BROADCAST_ACTION
+import com.example.kotlin_lessons.utils.BUNDLE_KEY
+import com.example.kotlin_lessons.utils.BUNDLE_KEY_WEATHER
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.DetailsViewModel
-import com.example.kotlin_lessons.view_model.MainViewModel
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import okhttp3.*
-import java.io.IOException
+import okhttp3.OkHttpClient
 
 
 class DetailsFragment : Fragment() {

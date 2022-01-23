@@ -6,13 +6,10 @@ import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.model.WeatherDTO
 import com.example.kotlin_lessons.model.getDefaultCity
 import com.example.kotlin_lessons.repository.RepositoryImpl
-import com.example.kotlin_lessons.utils.YANDEX_API_END_POINT
-import com.example.kotlin_lessons.utils.YANDEX_API_URL
-import com.google.gson.Gson
-import okhttp3.Call
-import okhttp3.Response
-import java.io.IOException
-import okhttp3.Callback
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 //MutableLiveData озанчает изменяемая LiveData, mutable - изменчевый
 class DetailsViewModel(
@@ -27,26 +24,31 @@ class DetailsViewModel(
     fun getLiveData() = liveData
 
 
-    fun getWeatherFromRemoteServer(lat: Double,lon: Double) {
+    fun getWeatherFromRemoteServer(lat: Double, lon: Double) {
         liveData.postValue(AppState.Loading(0))
-        repositoryImpl.getWeatherFromServer(YANDEX_API_URL + YANDEX_API_END_POINT + "?lat = ${lat}&lon = ${lon}", callback)
+        repositoryImpl.getWeatherFromServer(lat, lon, callback)
     }
 
-    fun converterDTOtoModel(weatherDTO: WeatherDTO): List<Weather>{
-        return listOf(Weather(getDefaultCity(), weatherDTO.fact.temp.toInt(), weatherDTO.fact.feelsLike.toInt()))
+    fun converterDTOtoModel(weatherDTO: WeatherDTO): List<Weather> {
+        return listOf(
+            Weather(
+                getDefaultCity(),
+                weatherDTO.fact.temp.toInt(),
+                weatherDTO.fact.feelsLike.toInt()
+            )
+        )
     }
 
-   private val callback = object : Callback{
-       override  fun onFailure(call: Call, e: IOException) {
+    private val callback = object : Callback<WeatherDTO> {
+        override fun onFailure(call: Call<WeatherDTO>, e: Throwable) {
             TODO("Not yet implemented")
         }
 
-       override fun onResponse(call: Call, response: Response) {
+        override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {
             if (response.isSuccessful) {
                 response.body()?.let {
-                    val json = it.string()
-               liveData.postValue(AppState.Success(converterDTOtoModel(Gson().fromJson(json, WeatherDTO::class.java))))
-                    }
+                    liveData.postValue(AppState.Success(converterDTOtoModel(it)))
+                }
             } else {
 //TODO HW
             }

@@ -12,7 +12,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-//MutableLiveData озанчает изменяемая LiveData, mutable - изменчевый
+//MutableLiveData озанчает изменяемая LiveData, mutable - изменчивый
 class DetailsViewModel(
 
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
@@ -43,6 +43,7 @@ class DetailsViewModel(
     private val callback = object : Callback<WeatherDTO> {
         override fun onFailure(call: Call<WeatherDTO>, e: Throwable) {
             Log.d("Error", "Server not found")
+
         }
 
         override fun onResponse(call: Call<WeatherDTO>, response: Response<WeatherDTO>) {

@@ -2,7 +2,8 @@ package com.example.kotlin_lessons.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin_lessons.repository.RepositoryImpl
+import com.example.kotlin_lessons.repository.RepositoryLocalImpl
+import com.example.kotlin_lessons.repository.RepositoryRemoteImpl
 import java.lang.Thread.sleep
 
 //MutableLiveData озанчает изменяемая LiveData, mutable - изменчевый
@@ -11,8 +12,8 @@ class MainViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
 ) : ViewModel() {
 
-    private val repositoryImpl: RepositoryImpl by lazy {
-        RepositoryImpl()
+    private val repositoryLocalImpl: RepositoryLocalImpl by lazy {
+        RepositoryLocalImpl()
     }
 
     fun getLiveData() = liveData
@@ -27,7 +28,7 @@ class MainViewModel(
             sleep(1000)
             liveData.postValue(
                 AppState.Success(
-                    with(repositoryImpl) {
+                    with(repositoryLocalImpl) {
                         if (isRussia)
                             getWeatherFromLocalStorageRus()
                         else getWeatherFromLocalStorageWorld()

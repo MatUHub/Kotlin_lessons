@@ -2,6 +2,7 @@ package com.example.kotlin_lessons.room
 
 import androidx.room.*
 
+@Dao
 interface HistoryWeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

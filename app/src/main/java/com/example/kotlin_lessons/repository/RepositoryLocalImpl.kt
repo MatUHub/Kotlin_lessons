@@ -15,7 +15,8 @@ class RepositoryLocalImpl : RepositoryCitiesList, RepositoryHistoryWeather {
         return converterHistoryEntityToWeather(App.getHistoryWeatherDao().getAllHistoryWeather())
     }
 
-    fun converterHistoryEntityToWeather(entityList: List<HistoryWeatherEntity>): List<Weather> {
+    private fun converterHistoryEntityToWeather(entityList: List<HistoryWeatherEntity>): List<Weather> {
+
         return entityList.map {
             Weather(
                 City(it.city, 0.0, 0.0),

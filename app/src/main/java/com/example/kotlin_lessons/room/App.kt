@@ -18,10 +18,10 @@ class App:Application() {
         fun getHistoryWeatherDao(): HistoryWeatherDao {
             if (db == null) {
                 if (appInstance == null) {
-                    throw IllformedLocaleException("Ошибка ")
+                   throw IllformedLocaleException("Ошибка ")
                 } else {
                     db = Room.databaseBuilder(appInstance!!.applicationContext, HistoryDatabase::class.java, DB_NAME)
-                        .allowMainThreadQueries()
+                        //.allowMainThreadQueries()
                         .build()
                 }
             }

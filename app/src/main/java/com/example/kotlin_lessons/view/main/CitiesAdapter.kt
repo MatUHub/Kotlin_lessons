@@ -8,8 +8,8 @@ import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.databinding.MainRecyclerItemBinding
 import com.example.kotlin_lessons.model.Weather
 
-class MainFragmentAdapter(val listener: OnMyItemClickListener) :
-    RecyclerView.Adapter<MainFragmentAdapter.MainViewHolder>() {
+class CitiesAdapter(val listener: OnMyItemClickListener) :
+    RecyclerView.Adapter<CitiesAdapter.MainViewHolder>() {
 
     private var weatherData: List<Weather> = listOf()
 

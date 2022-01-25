@@ -1,37 +1,41 @@
-package com.example.kotlin_lessons.view.main
+package com.example.kotlin_lessons.view.history
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.R
-import com.example.kotlin_lessons.databinding.FragmentMainBinding
+import com.example.kotlin_lessons.databinding.FragmentHistoryBinding
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.utils.BUNDLE_KEY
 import com.example.kotlin_lessons.view.details.DetailsFragment
+import com.example.kotlin_lessons.view.main.CitiesAdapter
+import com.example.kotlin_lessons.view.main.OnMyItemClickListener
 import com.example.kotlin_lessons.view_model.AppState
+import com.example.kotlin_lessons.view_model.HistoryViewModel
 import com.example.kotlin_lessons.view_model.MainViewModel
-import com.google.android.material.snackbar.Snackbar
 
-class MainFragment : Fragment(), OnMyItemClickListener {
+class HistoryFragment : Fragment(), OnMyItemClickListener {
 
     //Создание переменной binding
-    private var _binding: FragmentMainBinding? = null
+    private var _binding: FragmentHistoryBinding? = null
 
     //Схема для унчитожения binding при лквидации Activity
-    private val binding: FragmentMainBinding
+    private val binding: FragmentHistoryBinding
         get() {
             return _binding!!
         }
 
     private val adapter: CitiesAdapter by lazy { CitiesAdapter(this) }
-    private var isRussian = true
 
     //Создание ссылки на ViewModel
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: HistoryViewModel by lazy {
+        ViewModelProvider(this).get(HistoryViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,36 +45,11 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         //ViewModelProvider хранилище для всех ViewModel, контролирует поуляцию ViewModel во всем проекте, каждая ViewModel в одном экземпляре
         //MainViewModel::class.java тоже самое что и MainViewModel.class в Java
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         //Избежание утечек памяти
         // it - имя по умолчанию для одного параметра
-        initView()
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
-        viewModel.getWeatherFromLocalSourceRus()
-    }
-
-    private fun initView() {
-        with(binding) {
-            mainFragmentRecyclerView.adapter = adapter
-            mainFragmentFAB.setOnClickListener {
-                sentRequest()
-            }
-        }
-    }
-
-    private fun sentRequest() {
-        isRussian = !isRussian
-
-        with(binding) {
-            if (isRussian) {
-                mainFragmentFAB.setImageResource(R.drawable.ic_russia)
-                viewModel.getWeatherFromLocalSourceRus()
-            } else {
-                mainFragmentFAB.setImageResource(R.drawable.ic_earth)
-                viewModel.getWeatherFromLocalSourceWorld()
-            }
-        }
-
+        viewModel.getAllHistory()
+        binding.historyFragmentRecyclerView.adapter = adapter
     }
 
     //requireContext() при вызове данно фнукции происходи поверка на null
@@ -78,28 +57,15 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         with(binding) {
             when (appState) {
                 is AppState.Error -> {
-                    mainFragmentLoadingLayout.visibility = View.GONE
-                    Snackbar.make(root, "Error", Snackbar.LENGTH_LONG)
-                        .setAction("Try again") { sentRequest() }.show()
-
+                    Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
                 }
-                is AppState.Loading -> {
-                    mainFragmentLoadingLayout.visibility = View.VISIBLE
-                }
+                is AppState.Loading -> {}
                 is AppState.Success -> {
-                    mainFragmentLoadingLayout.visibility = View.GONE
-
-                    adapter.setWeather(appState.weatherData)
-
-                    Snackbar.make(
-                        root,
-                        "Success",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+adapter.setWeather(appState.weatherData)
                 }
             }
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,7 +73,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
     ): View {
 
         // Инициализация binding в проекте
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -118,7 +84,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
 
     //companion задает static свойства
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() = HistoryFragment()
     }
 
     override fun onItemClick(weather: Weather) {
@@ -132,7 +98,6 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                     }
                     ))
                 .addToBackStack("").commit()
-
         }
     }
 }

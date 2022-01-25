@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container_main, MainFragment.newInstance())
                 .commit()
 
-        val listWeather = App.getHistoryDatabase().getAllHistoryWeather()
+       //val listWeather = App.getHistoryWeatherDao().getAllHistoryWeather()
     }
 
 

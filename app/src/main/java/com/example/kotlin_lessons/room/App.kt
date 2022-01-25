@@ -12,15 +12,15 @@ class App:Application() {
 
     companion object {
         private var appInstance: App? = null
-        const val DB_NAME = "History.db"
+        private const val DB_NAME = "History.db"
         private var db: HistoryDatabase? = null
 
-        fun getHistoryDatabase(): HistoryWeatherDao {
+        fun getHistoryWeatherDao(): HistoryWeatherDao {
             if (db == null) {
                 if (appInstance == null) {
                     throw IllformedLocaleException("Ошибка ")
                 } else {
-                    db = Room.databaseBuilder(appInstance!!, HistoryDatabase::class.java, DB_NAME)
+                    db = Room.databaseBuilder(appInstance!!.applicationContext, HistoryDatabase::class.java, DB_NAME)
                         .allowMainThreadQueries()
                         .build()
                 }

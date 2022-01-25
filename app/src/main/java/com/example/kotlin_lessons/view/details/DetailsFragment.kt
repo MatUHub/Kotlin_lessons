@@ -85,9 +85,9 @@ class DetailsFragment : Fragment() {
 
         with(binding) {
 
-         /*   headerIcon.setOnClickListener {
+           headerIcon.setOnClickListener {
             viewModel.saveWeather(weather)
-        }*/
+        }
             cityName.text = localWeather.city.name
             cityCoordinates.text = "${localWeather.city.lat} ${localWeather.city.lon}"
             temperatureValue.text = "${weather.temperature}"

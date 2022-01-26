@@ -6,7 +6,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.databinding.ActivityMainBinding
-import com.example.kotlin_lessons.room.App
 import com.example.kotlin_lessons.view.history.HistoryFragment
 import com.example.kotlin_lessons.view.main.MainFragment
 
@@ -39,10 +38,10 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_history -> {
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.container, HistoryFragment.newInstance()).addToBackStack("").commit()
+                    .add(R.id.container_main, HistoryFragment.newInstance()).addToBackStack("")
+                    .commit()
                 true
             }
-
             else -> {
                 super.onOptionsItemSelected(item)
             }

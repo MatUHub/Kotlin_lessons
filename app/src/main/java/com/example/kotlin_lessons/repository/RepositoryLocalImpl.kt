@@ -1,6 +1,9 @@
 package com.example.kotlin_lessons.repository
 
-import com.example.kotlin_lessons.model.*
+import com.example.kotlin_lessons.model.City
+import com.example.kotlin_lessons.model.Weather
+import com.example.kotlin_lessons.model.getRussianCities
+import com.example.kotlin_lessons.model.getWorldCities
 import com.example.kotlin_lessons.room.App
 import com.example.kotlin_lessons.room.HistoryWeatherEntity
 
@@ -12,6 +15,7 @@ class RepositoryLocalImpl : RepositoryCitiesList, RepositoryHistoryWeather {
     override fun getWeatherFromLocalStorageWorld() = getWorldCities()
 
     override fun getAllHistoryWeather(): List<Weather> {
+
         return converterHistoryEntityToWeather(App.getHistoryWeatherDao().getAllHistoryWeather())
     }
 
@@ -28,9 +32,11 @@ class RepositoryLocalImpl : RepositoryCitiesList, RepositoryHistoryWeather {
     }
 
     override fun saveWeather(weather: Weather) {
-        App.getHistoryWeatherDao().insert(
-            convertWeatherToHistoryWeatherEntity(weather)
-        )
+        Thread {
+            App.getHistoryWeatherDao().insert(
+                convertWeatherToHistoryWeatherEntity(weather)
+            )
+        }.start()
     }
 
     private fun convertWeatherToHistoryWeatherEntity(weather: Weather) =

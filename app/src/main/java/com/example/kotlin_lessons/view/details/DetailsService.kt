@@ -19,8 +19,8 @@ class DetailsService(name: String = "") : IntentService(name) {
 
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
-            val lat = intent.getDoubleExtra(BUNDLE_KEY_LAT,0.0)
-            val lon = intent.getDoubleExtra(BUNDLE_KEY_LON,0.0)
+            val lat = intent.getDoubleExtra(BUNDLE_KEY_LAT, 0.0)
+            val lon = intent.getDoubleExtra(BUNDLE_KEY_LON, 0.0)
             loadWeather(lat, lon)
         }
     }
@@ -36,9 +36,9 @@ class DetailsService(name: String = "") : IntentService(name) {
             BufferedReader(InputStreamReader(httpsURLConnection.inputStream))
         val weatherDTO: WeatherDTO? =
             Gson().fromJson(convertBufferToResult(bufferedReader), WeatherDTO::class.java)
-       sendBroadcast(Intent(BROADCAST_ACTION).apply {
-           putExtra(BUNDLE_KEY_WEATHER, weatherDTO)
-       })
+        sendBroadcast(Intent(BROADCAST_ACTION).apply {
+            putExtra(BUNDLE_KEY_WEATHER, weatherDTO)
+        })
     }
 
     private fun convertBufferToResult(bufferedReader: BufferedReader): String {

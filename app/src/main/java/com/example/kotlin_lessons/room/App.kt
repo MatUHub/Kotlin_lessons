@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import java.util.*
 
-class App:Application() {
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
         appInstance = this
@@ -18,10 +18,13 @@ class App:Application() {
         fun getHistoryWeatherDao(): HistoryWeatherDao {
             if (db == null) {
                 if (appInstance == null) {
-                   throw IllformedLocaleException("Ошибка ")
+                    throw IllformedLocaleException("Ошибка ")
                 } else {
-                    db = Room.databaseBuilder(appInstance!!.applicationContext, HistoryDatabase::class.java, DB_NAME)
-                        //.allowMainThreadQueries()
+                    db = Room.databaseBuilder(
+                        appInstance!!.applicationContext,
+                        HistoryDatabase::class.java,
+                        DB_NAME
+                    )
                         .build()
                 }
             }

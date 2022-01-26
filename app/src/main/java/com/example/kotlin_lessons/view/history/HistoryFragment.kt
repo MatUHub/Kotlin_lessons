@@ -8,16 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.databinding.FragmentHistoryBinding
 import com.example.kotlin_lessons.model.Weather
-import com.example.kotlin_lessons.utils.BUNDLE_KEY
-import com.example.kotlin_lessons.view.details.DetailsFragment
-import com.example.kotlin_lessons.view.main.CitiesAdapter
 import com.example.kotlin_lessons.view.main.OnMyItemClickListener
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.HistoryViewModel
-import com.example.kotlin_lessons.view_model.MainViewModel
 
 class HistoryFragment : Fragment(), OnMyItemClickListener {
 
@@ -30,7 +25,7 @@ class HistoryFragment : Fragment(), OnMyItemClickListener {
             return _binding!!
         }
 
-    private val adapter: CitiesAdapter by lazy { CitiesAdapter(this) }
+    private val adapter: CitiesHistoryAdapter by lazy { CitiesHistoryAdapter(this) }
 
     //Создание ссылки на ViewModel
     private val viewModel: HistoryViewModel by lazy {
@@ -57,15 +52,15 @@ class HistoryFragment : Fragment(), OnMyItemClickListener {
         with(binding) {
             when (appState) {
                 is AppState.Error -> {
-                    Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
                 is AppState.Loading -> {}
                 is AppState.Success -> {
-adapter.setWeather(appState.weatherData)
+                    adapter.setWeather(appState.weatherData)
                 }
             }
-            }
         }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,16 +84,7 @@ adapter.setWeather(appState.weatherData)
 
     override fun onItemClick(weather: Weather) {
 
-        activity?.run {
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.container_main,
-                    DetailsFragment.newInstance(Bundle().apply {
-                        putParcelable(BUNDLE_KEY, weather)
-                    }
-                    ))
-                .addToBackStack("").commit()
-        }
+
     }
 }
 

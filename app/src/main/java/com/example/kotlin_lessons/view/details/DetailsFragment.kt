@@ -21,7 +21,6 @@ import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.DetailsViewModel
 
 
-
 class DetailsFragment : Fragment() {
 
     //Создание переменной binding
@@ -47,14 +46,14 @@ class DetailsFragment : Fragment() {
         ViewModelProvider(this).get(DetailsViewModel::class.java)
     }
 
-   private fun renderData(appState: AppState) {
+    private fun renderData(appState: AppState) {
         with(binding) {
             when (appState) {
                 is AppState.Error -> {
-                    Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
                 is AppState.Loading -> {
-                    Toast.makeText(context,"Loading",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                 }
                 is AppState.Success -> {
                     val weather = appState.weatherData[0]
@@ -82,12 +81,12 @@ class DetailsFragment : Fragment() {
     private fun setWeatherData(weather: Weather) {
 
 
-
         with(binding) {
 
-           headerIcon.setOnClickListener {
-            viewModel.saveWeather(weather)
-        }
+            headerIcon.setOnClickListener {
+                weather.city = localWeather.city
+                viewModel.saveWeather(weather)
+            }
             cityName.text = localWeather.city.name
             cityCoordinates.text = "${localWeather.city.lat} ${localWeather.city.lon}"
             temperatureValue.text = "${weather.temperature}"

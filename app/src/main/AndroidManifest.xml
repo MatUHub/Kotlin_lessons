@@ -2,10 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kotlin_lessons">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
-        android:name = ".room.App"
+        android:name=".room.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,5 +20,9 @@
             </intent-filter>
         </activity>
     </application>
+    // разрешение на использование контактов
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    // разрешение на использование интренета
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

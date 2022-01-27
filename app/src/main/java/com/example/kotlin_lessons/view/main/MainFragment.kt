@@ -1,5 +1,6 @@
 package com.example.kotlin_lessons.view.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.R
+import com.example.kotlin_lessons.Settings
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.utils.BUNDLE_KEY
@@ -15,6 +17,7 @@ import com.example.kotlin_lessons.view.details.DetailsFragment
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment(), OnMyItemClickListener {
 
@@ -28,14 +31,12 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }
 
     private val adapter: CitiesAdapter by lazy { CitiesAdapter(this) }
+
     private var isRussian = true
 
     //Создание ссылки на ViewModel
     private lateinit var viewModel: MainViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,7 +47,18 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         // it - имя по умолчанию для одного параметра
         initView()
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
-        viewModel.getWeatherFromLocalSourceRus()
+
+        isRussian = requireActivity().getSharedPreferences(Settings.SHARED_PREF, Context.MODE_PRIVATE)
+                .getBoolean(Settings.SETTING_RUS, Settings.settingRus)
+
+        if (isRussian) {
+            mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+            viewModel.getWeatherFromLocalSourceRus()
+        } else {
+            mainFragmentFAB.setImageResource(R.drawable.ic_earth)
+            viewModel.getWeatherFromLocalSourceWorld()
+        }
+
     }
 
     private fun initView() {
@@ -59,22 +71,31 @@ class MainFragment : Fragment(), OnMyItemClickListener {
     }
 
     private fun sentRequest() {
-        isRussian = !isRussian
 
+        isRussian = !isRussian
+        val sharedPreferences =
+            requireActivity().getSharedPreferences(Settings.SHARED_PREF, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
         with(binding) {
             if (isRussian) {
+                Settings.settingRus = isRussian
                 mainFragmentFAB.setImageResource(R.drawable.ic_russia)
                 viewModel.getWeatherFromLocalSourceRus()
+                editor.putBoolean(Settings.SETTING_RUS, Settings.settingRus)
+                editor.apply()
             } else {
+                editor.putBoolean(Settings.SETTING_RUS, Settings.settingRus)
+                Settings.settingRus = isRussian
                 mainFragmentFAB.setImageResource(R.drawable.ic_earth)
                 viewModel.getWeatherFromLocalSourceWorld()
+                editor.apply()
             }
         }
 
     }
 
     //requireContext() при вызове данно фнукции происходи поверка на null
-    fun renderData(appState: AppState) {
+    private fun renderData(appState: AppState) {
         with(binding) {
             when (appState) {
                 is AppState.Error -> {
@@ -109,6 +130,8 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         // Инициализация binding в проекте
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
+
+
     }
 
     override fun onDestroy() {

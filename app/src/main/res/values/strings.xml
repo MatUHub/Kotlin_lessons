@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Kotlin_lesson_3</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">Kotlin_lesson</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_city">Москва</string>
     <string name="hint_city_coordinates">lt/ln: 35.781, 84.453</string>

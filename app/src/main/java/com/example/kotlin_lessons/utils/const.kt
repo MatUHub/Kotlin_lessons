@@ -10,3 +10,6 @@ const val YANDEX_API_URL = "https://api.weather.yandex.ru/"
 const val YANDEX_API_END_POINT = "v2/informers"
 
 const val YANDEX_API_KEY = "X-Yandex-API-Key"
+
+const val SHARED_RUS = "Rus or World"
+

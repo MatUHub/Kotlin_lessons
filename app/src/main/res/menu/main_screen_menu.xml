@@ -6,4 +6,9 @@
         android:title="history"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/menu_content"
+        android:title="content"
+        app:showAsAction="always"/>
+
 </menu>

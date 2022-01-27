@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlin_lessons.ContentProviderFragment
 import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.Settings
 import com.example.kotlin_lessons.databinding.ActivityMainBinding
@@ -44,6 +45,12 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_history -> {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.container_main, HistoryFragment.newInstance()).addToBackStack("")
+                    .commit()
+                true
+            }
+            R.id.menu_content -> {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.container_main, ContentProviderFragment.newInstance()).addToBackStack("")
                     .commit()
                 true
             }

@@ -43,9 +43,17 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_history -> {
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.container_main, HistoryFragment.newInstance()).addToBackStack("")
-                    .commit()
+                // определили фрагмент по тегу "tag"
+                val fragmentHistory = supportFragmentManager.findFragmentByTag("tag")
+                // проверили на null ссылку fragmentHistory
+                if(fragmentHistory == null){
+                    supportFragmentManager.apply {
+                        beginTransaction()
+                            .replace(R.id.container_main, HistoryFragment.newInstance(), "tag")
+                            .addToBackStack("")
+                            .commit()
+                    }
+                }
                 true
             }
             R.id.menu_content -> {

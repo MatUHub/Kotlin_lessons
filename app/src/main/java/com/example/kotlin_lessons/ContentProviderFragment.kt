@@ -95,10 +95,12 @@ context?.let {
         ContactsContract.Contacts.DISPLAY_NAME + " ASC"
     )
     cursor?.let { cursor ->
-        for (i in 5 .. 10){
+        for (i in 0 until cursor.count){
             cursor.moveToPosition(i)
-            val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-            addView(name)
+            var name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+            // Добавлена проверка на null, если в списке контактов на телефоне не заполнена графа name, то выходит ошибка NullPointerExeption
+            if(name == null) {name = "NoName"}
+                addView(name)
         }
     }
     cursor?.close()

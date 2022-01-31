@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.R
 import com.example.kotlin_lessons.Settings
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
+import com.example.kotlin_lessons.model.City
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.utils.BUNDLE_KEY
 import com.example.kotlin_lessons.view.details.DetailsFragment
@@ -53,7 +55,8 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         initView()
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
 
-        isRussian = requireActivity().getSharedPreferences(Settings.SHARED_PREF, Context.MODE_PRIVATE)
+        isRussian =
+            requireActivity().getSharedPreferences(Settings.SHARED_PREF, Context.MODE_PRIVATE)
                 .getBoolean(Settings.SETTING_RUS, Settings.settingRus)
 
         if (isRussian) {
@@ -72,7 +75,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
             mainFragmentFAB.setOnClickListener {
                 sentRequest()
             }
-            mainFragmentFABLocation.setOnClickListener(){
+            mainFragmentFABLocation.setOnClickListener() {
                 checkPermission()
             }
         }
@@ -88,7 +91,7 @@ class MainFragment : Fragment(), OnMyItemClickListener {
                 }
                 //запрос рационализации
                 shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    showDialog()
+                    showDialogRacion()
                 }
 
                 else -> {
@@ -99,11 +102,83 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }
     }
 
+    private val MIN_DISTANCE = 100f
+    private val REFRESH_PERIOD = 60000L
 
+    private fun showAddressDialog(address: String, location: Location) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Доступ к геолокации")
+            .setMessage(address)
+            .setPositiveButton("Узнать погоду") { _, _ ->
+                // запрос на разрешение к доступу к контактам, при положительном ответе на сообщение
+                toDetails(Weather(City(address, location.latitude, location.longitude)))
+            }
+            .setNegativeButton("Нет") { dialog, _ -> dialog.dismiss() }
+            .create()
+            .show()
+    }
 
-    private fun getLocation(){
+    private fun getAddress(location: Location) {
+
+        Thread {
+            val geocoder = Geocoder(requireContext())
+            val listAddress = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            requireActivity().runOnUiThread {
+                showAddressDialog(listAddress[0].getAddressLine(0), location)
+            }
+        }.start()
 
     }
+
+    private val locationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            getAddress(location)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            super.onProviderDisabled(provider)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            super.onProviderEnabled(provider)
+        }
+    }
+
+    private fun getLocation() {
+        activity?.let {
+            if (ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+                == PackageManager.PERMISSION_GRANTED
+            ) {
+                val locationManager =
+                    it.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    val providerGPS = locationManager.getProvider(LocationManager.GPS_PROVIDER)
+                    providerGPS?.let {
+                        locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            REFRESH_PERIOD,
+                            MIN_DISTANCE,
+                            locationListener
+                        )
+                    }
+                } else {
+                    val lastLocation =
+                        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    lastLocation?.let {
+                        getAddress(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showDialog() {
+
+    }
+
 
     val REQUEST_CODE = 123
     private fun myRequestPermission() {
@@ -116,26 +191,26 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if(requestCode == REQUEST_CODE){
-            when{
-                (grantResults[0] == PackageManager.PERMISSION_GRANTED) ->  getLocation()
+        if (requestCode == REQUEST_CODE) {
+            when {
+                (grantResults[0] == PackageManager.PERMISSION_GRANTED) -> getLocation()
 
-                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> showDialog()
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> showDialogRacion()
 
                 else -> Log.d("", "")
             }
         }
     }
 
-    private fun showDialog() {
+    private fun showDialogRacion() {
         AlertDialog.Builder(requireContext())
             .setTitle("Доступ к геолокации")
             .setMessage("Предоставте доступ иначе ...")
-            .setPositiveButton("Предоставить доступ"){_,_ ->
+            .setPositiveButton("Предоставить доступ") { _, _ ->
                 // запрос на разрешение к доступу к контактам, при положительном ответе на сообщение
                 myRequestPermission()
             }
-            .setNegativeButton("Нет"){ dialog, _ -> dialog.dismiss()}
+            .setNegativeButton("Нет") { dialog, _ -> dialog.dismiss() }
             .create()
             .show()
     }
@@ -216,6 +291,10 @@ class MainFragment : Fragment(), OnMyItemClickListener {
 
     override fun onItemClick(weather: Weather) {
 
+        toDetails(weather)
+    }
+
+    private fun toDetails(weather: Weather) {
         activity?.run {
             supportFragmentManager
                 .beginTransaction()

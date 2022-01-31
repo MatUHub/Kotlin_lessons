@@ -27,7 +27,10 @@ class DetailsViewModel(
     fun getLiveData() = liveData
 
     fun saveWeather(weather: Weather) {
-        repositoryLocalImpl.saveWeather(weather)
+        Thread {
+            repositoryLocalImpl.saveWeather(weather)
+        }.start()
+
 
     }
 

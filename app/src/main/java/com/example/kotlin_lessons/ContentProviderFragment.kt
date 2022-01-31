@@ -97,10 +97,11 @@ context?.let {
     cursor?.let { cursor ->
         for (i in 0 until cursor.count){
             cursor.moveToPosition(i)
-            var name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+            var name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
 
             // Добавлена проверка на null, если в списке контактов на телефоне не заполнена графа name, то выходит ошибка NullPointerExeption
             if(name == null) {name = "NoName"}
+
             addView(name)
         }
     }
@@ -112,6 +113,7 @@ context?.let {
             text = name
             textSize = 30f
         })
+
 
     }
 

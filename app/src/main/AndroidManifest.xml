@@ -24,5 +24,6 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     // разрешение на использование интренета
     <uses-permission android:name="android.permission.INTERNET" />
-
+    // разрешение на использовании местоположения
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 </manifest>

@@ -1,10 +1,15 @@
 package com.example.kotlin_lessons.view.main
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -67,7 +72,72 @@ class MainFragment : Fragment(), OnMyItemClickListener {
             mainFragmentFAB.setOnClickListener {
                 sentRequest()
             }
+            mainFragmentFABLocation.setOnClickListener(){
+                checkPermission()
+            }
         }
+    }
+
+    private fun checkPermission() {
+        context?.let {
+            when {
+                // запрос на разрешения доступа к контактам
+                ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED -> {
+                    getLocation()
+                }
+                //запрос рационализации
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                    showDialog()
+                }
+
+                else -> {
+                    // команда запрос на разрешение
+                    myRequestPermission()
+                }
+            }
+        }
+    }
+
+
+
+    private fun getLocation(){
+
+    }
+
+    val REQUEST_CODE = 123
+    private fun myRequestPermission() {
+        // разрешение на доступ к определению местоположения
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if(requestCode == REQUEST_CODE){
+            when{
+                (grantResults[0] == PackageManager.PERMISSION_GRANTED) ->  getLocation()
+
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> showDialog()
+
+                else -> Log.d("", "")
+            }
+        }
+    }
+
+    private fun showDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Доступ к геолокации")
+            .setMessage("Предоставте доступ иначе ...")
+            .setPositiveButton("Предоставить доступ"){_,_ ->
+                // запрос на разрешение к доступу к контактам, при положительном ответе на сообщение
+                myRequestPermission()
+            }
+            .setNegativeButton("Нет"){ dialog, _ -> dialog.dismiss()}
+            .create()
+            .show()
     }
 
     private fun sentRequest() {

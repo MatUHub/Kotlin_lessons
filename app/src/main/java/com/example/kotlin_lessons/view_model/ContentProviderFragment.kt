@@ -1,4 +1,4 @@
-package com.example.kotlin_lessons
+package com.example.kotlin_lessons.view_model
 
 import android.Manifest
 import android.app.AlertDialog
@@ -108,13 +108,12 @@ context?.let {
     cursor?.close()
 }
     }
+
     private fun addView(name : String){
         binding.containerForContacts.addView(TextView(requireContext()).apply {
             text = name
             textSize = 30f
         })
-
-
     }
 
     private fun showDialog() {

@@ -1,4 +1,4 @@
-package com.example.kotlin_lessons
+package com.example.kotlin_lessons.model
 
 class Settings {
 

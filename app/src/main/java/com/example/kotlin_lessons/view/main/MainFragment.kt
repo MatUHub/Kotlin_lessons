@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.R
-import com.example.kotlin_lessons.Settings
+import com.example.kotlin_lessons.model.Settings
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
 import com.example.kotlin_lessons.model.City
 import com.example.kotlin_lessons.model.Weather

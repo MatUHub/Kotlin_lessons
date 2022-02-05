@@ -4,8 +4,10 @@ package com.example.kotlin_lessons.view
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,8 @@ import com.example.kotlin_lessons.databinding.ActivityMainBinding
 import com.example.kotlin_lessons.utils.SHARED_RUS
 import com.example.kotlin_lessons.view.history.HistoryFragment
 import com.example.kotlin_lessons.view.main.MainFragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -96,7 +100,6 @@ class MainActivity : AppCompatActivity() {
         //Введение binding в проект
         setContentView(binding.root)
 
-        pushNotification()
 
         if (savedInstanceState == null)
             supportFragmentManager
@@ -106,6 +109,9 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences(Settings.SHARED_PREF, Context.MODE_PRIVATE)
         Settings.settingRus = sharedPreferences.getBoolean(SHARED_RUS, false)
+
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

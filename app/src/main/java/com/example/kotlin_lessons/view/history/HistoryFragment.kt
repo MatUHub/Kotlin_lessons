@@ -8,22 +8,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.kotlin_lessons.databinding.FragmentDetailsBinding
 import com.example.kotlin_lessons.databinding.FragmentHistoryBinding
 import com.example.kotlin_lessons.model.Weather
+import com.example.kotlin_lessons.view.BaseFragment
 import com.example.kotlin_lessons.view.main.OnMyItemClickListener
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.HistoryViewModel
 
-class HistoryFragment : Fragment(), OnMyItemClickListener {
+class HistoryFragment : BaseFragment<FragmentHistoryBinding>(FragmentHistoryBinding::inflate), OnMyItemClickListener {
 
-    //Создание переменной binding
-    private var _binding: FragmentHistoryBinding? = null
 
-    //Схема для унчитожения binding при лквидации Activity
-    private val binding: FragmentHistoryBinding
-        get() {
-            return _binding!!
-        }
 
     private val adapter: CitiesHistoryAdapter by lazy { CitiesHistoryAdapter(this) }
 
@@ -57,21 +52,6 @@ class HistoryFragment : Fragment(), OnMyItemClickListener {
                 }
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        // Инициализация binding в проекте
-        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     //companion задает static свойства

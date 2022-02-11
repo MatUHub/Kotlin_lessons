@@ -17,20 +17,14 @@ import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.utils.BROADCAST_ACTION
 import com.example.kotlin_lessons.utils.BUNDLE_KEY
 import com.example.kotlin_lessons.utils.BUNDLE_KEY_WEATHER
+import com.example.kotlin_lessons.view.BaseFragment
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.DetailsViewModel
 
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::inflate) {
 
-    //Создание переменной binding
-    private var _binding: FragmentDetailsBinding? = null
 
-    //Схема для унчитожения binding при лквидации Activity
-    private val binding: FragmentDetailsBinding
-        get() {
-            return _binding!!
-        }
 
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -105,20 +99,8 @@ class DetailsFragment : Fragment() {
     }
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Инициализация binding в проекте
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-        requireActivity().unregisterReceiver(receiver)
-    }
+
 
     //companion задает static свойства
     companion object {

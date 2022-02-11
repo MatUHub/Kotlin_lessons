@@ -18,27 +18,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlin_lessons.R
+import com.example.kotlin_lessons.databinding.FragmentHistoryBinding
 import com.example.kotlin_lessons.databinding.FragmentMainBinding
 import com.example.kotlin_lessons.model.City
 import com.example.kotlin_lessons.model.Settings
 import com.example.kotlin_lessons.model.Weather
 import com.example.kotlin_lessons.utils.BUNDLE_KEY
+import com.example.kotlin_lessons.view.BaseFragment
 import com.example.kotlin_lessons.view.details.DetailsFragment
 import com.example.kotlin_lessons.view_model.AppState
 import com.example.kotlin_lessons.view_model.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_main.*
 
-class MainFragment : Fragment(), OnMyItemClickListener {
+class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate), OnMyItemClickListener {
 
-    //Создание переменной binding
-    private var _binding: FragmentMainBinding? = null
-
-    //Схема для унчитожения binding при лквидации Activity
-    private val binding: FragmentMainBinding
-        get() {
-            return _binding!!
-        }
 
     private val adapter: CitiesAdapter by lazy { CitiesAdapter(this) }
 
@@ -270,22 +264,6 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        // Инициализация binding в проекте
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 
     //companion задает static свойства
     companion object {
@@ -311,4 +289,5 @@ class MainFragment : Fragment(), OnMyItemClickListener {
         }
     }
 }
+
 
